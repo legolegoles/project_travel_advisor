@@ -15,14 +15,17 @@ const Map = ({ coords, places, setCoords, setBounds, setChildClicked, weatherDat
     <div className={classes.mapContainer}>
       <GoogleMapReact
         bootstrapURLKeys={{ key: process.env.REACT_APP_GOOGLE_MAP_API_KEY }}
-        defaultCenter={coords}
+        defaultCenter={{ lat: 4.59675, lng: 121.09934 }}
         center={coords}
         defaultZoom={14}
         margin={[50, 50, 50, 50]}
-        options={{ disableDefaultUI: true, zoomControl: true, styles: mapStyles }}
+        options={{ disableDefaultUI: true, zoomControl: true, styles: mapStyles, gestureHandling: 'greedy' }}
         onChange={(e) => {
-          setCoords({ lat: e.center.lat, lng: e.center.lng });
-          setBounds({ ne: e.marginBounds.ne, sw: e.marginBounds.sw });
+          const latlng = new window.google.maps.LatLng(e.center.lat, e.center.lng);
+          const ne = new window.google.maps.LatLng(e.marginBounds.ne.lat, e.marginBounds.ne.lng);
+          const sw = new window.google.maps.LatLng(e.marginBounds.sw.lat, e.marginBounds.sw.lng);
+          setCoords({ lat: latlng.lat(), lng: latlng.lng() });
+          setBounds({ ne: { lat: ne.lat(), lng: ne.lng() }, sw: { lat: sw.lat(), lng: sw.lng() } });
         }}
         onChildClick={(child) => setChildClicked(child)}
       >

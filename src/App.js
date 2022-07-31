@@ -11,7 +11,7 @@ const App = () => {
   const [rating, setRating] = useState('');
 
   const [coords, setCoords] = useState({});
-  const [bounds, setBounds] = useState(null);
+  const [bounds, setBounds] = useState({});
 
   const [weatherData, setWeatherData] = useState([]);
   const [filteredPlaces, setFilteredPlaces] = useState([]);
@@ -33,8 +33,8 @@ const App = () => {
     setFilteredPlaces(filtered);
   }, [rating]);
 
-  useEffect(() => {
-    if (bounds) {
+  const refreshMap = () => {
+    if (bounds.ne && bounds.sw) {
       setIsLoading(true);
 
       getWeatherData(coords.lat, coords.lng)
@@ -48,7 +48,10 @@ const App = () => {
           setIsLoading(false);
         });
     }
-  }, [bounds, type]);
+  };
+  useEffect(() => {
+    refreshMap();
+  }, [type]); // bounds, type
 
   const onLoad = (autoC) => setAutocomplete(autoC);
 
@@ -68,6 +71,7 @@ const App = () => {
           <List
             isLoading={isLoading}
             childClicked={childClicked}
+            refreshClicked={refreshMap}
             places={filteredPlaces.length ? filteredPlaces : places}
             type={type}
             setType={setType}
@@ -75,7 +79,16 @@ const App = () => {
             setRating={setRating}
           />
         </Grid>
-        <Grid item xs={12} md={8} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <Grid
+          item
+          xs={12}
+          md={8}
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
           <Map
             setChildClicked={setChildClicked}
             setBounds={setBounds}

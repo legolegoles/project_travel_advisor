@@ -1,10 +1,10 @@
 import React, { useState, useEffect, createRef } from 'react';
-import { CircularProgress, Grid, Typography, InputLabel, MenuItem, FormControl, Select } from '@material-ui/core';
+import { CircularProgress, Grid, Typography, InputLabel, MenuItem, FormControl, Select, Button } from '@material-ui/core';
 
 import PlaceDetails from '../PlaceDetails/PlaceDetails';
 import useStyles from './styles.js';
 
-const List = ({ places, type, setType, rating, setRating, childClicked, isLoading }) => {
+const List = ({ places, type, setType, rating, setRating, childClicked, isLoading, refreshClicked }) => {
   const [elRefs, setElRefs] = useState([]);
   const classes = useStyles();
 
@@ -37,6 +37,10 @@ const List = ({ places, type, setType, rating, setRating, childClicked, isLoadin
               <MenuItem value="4">Above 4.0</MenuItem>
               <MenuItem value="4.5">Above 4.5</MenuItem>
             </Select>
+          </FormControl>
+          <FormControl className={classes.formControl}>
+            <InputLabel id="refresh"> Refresh</InputLabel>
+            <Button variant="contained" onClick={refreshClicked}>Refresh</Button>
           </FormControl>
           <Grid container spacing={3} className={classes.list}>
             {places?.map((place, i) => (
